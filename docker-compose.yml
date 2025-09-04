@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  # Go Backend
+  backend:
+    build: ./backend
+    ports:
+      - "8080:8080"
+    environment:
+      - PORT=8080
+    volumes:
+      - ./backend:/app
+    networks:
+      - mobil-rehber-network
+    restart: unless-stopped
+
+  # Python AI Service
+  ai-service:
+    build: ./ai-service
+    ports:
+      - "8000:8000"
+    environment:
+      - PORT=8000
+    volumes:
+      - ./ai-service:/app
+    networks:
+      - mobil-rehber-network
+    restart: unless-stopped
+    depends_on:
+      - backend
+
+networks:
+  mobil-rehber-network:
+    driver: bridge
+
+volumes:
+  backend-data:
+  ai-service-data:
+
+
